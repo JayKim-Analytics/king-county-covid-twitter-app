@@ -68,10 +68,10 @@ def plot_data(ax, df, label, color):
 
 def style_plot(fig, ax):
     ax.set_title('COVID-19 Rates in King County, Washington State')
-    ax.grid(axis='y')
     ax.set_ylabel('Weekly Cases per 100,000 Population')
+    ax.grid(axis='y')
 
-    ax.set_xlim([window, yesterday])
+    ax.set_xlim([window, datetime.today().date()])
     ax.set_ylim(bottom=0)
 
     # Sets month as major ticks and weeks as minor ticks
@@ -95,7 +95,7 @@ def style_plot(fig, ax):
 
     ax.legend(loc=2)
     fig.savefig('graphic.png', bbox_inches='tight', dpi='figure')
-    #plt.show()
+    plt.show()
 
 
 def write_tweet(dataframe, region):
