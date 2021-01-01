@@ -143,12 +143,8 @@ def send_tweet(text):
 king_county_pop = 2277200  # 2260800
 wa_state_pop = 7656200
 
-def stuff():
-    print(update_data())
 
 if __name__ == '__main__':
-    #stuff()
-    #'''
     yesterday = datetime.today().date() - timedelta(days=1)
     prev_day = yesterday - timedelta(days=1)
     window = yesterday + relativedelta(months=-3)
@@ -166,5 +162,4 @@ if __name__ == '__main__':
              f'Data from John Hopkins University.')
     print(tweet)
 
-    #send_tweet(tweet)
-    #'''
+    send_tweet(tweet)
