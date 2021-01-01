@@ -161,6 +161,5 @@ if __name__ == '__main__':
     tweet = (write_tweet(king_county_df, 'King County') +
              write_tweet(wa_state_df, 'Washington State') +
              f'Data from John Hopkins University.')
-    print(tweet)
 
     send_tweet(tweet)
