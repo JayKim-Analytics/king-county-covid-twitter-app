@@ -95,7 +95,7 @@ def style_plot(fig, ax):
 
     ax.legend(loc=2)
     fig.savefig('graphic.png', bbox_inches='tight', dpi='figure')
-    plt.show()
+    #plt.show()
 
 
 def write_tweet(dataframe, region):
