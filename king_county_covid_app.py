@@ -146,6 +146,7 @@ wa_state_pop = 7656200
 
 
 if __name__ == '__main__':
+    # written as - timedelta(days=2), as PythonAnywhere is hosted on UTC time
     yesterday = datetime.today().date() - timedelta(days=1)
     prev_day = yesterday - timedelta(days=1)
     window = yesterday + relativedelta(months=-3)
