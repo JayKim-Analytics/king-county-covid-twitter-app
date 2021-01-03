@@ -5,4 +5,5 @@ A twitter bot that tweets daily COVID-19 statistics for the King County area in 
 
 Script ran daily via PythonAnywhere.
 
-Dataset: https://www.kaggle.com/headsortails/covid19-us-county-jhu-data-demographics
+Dataset provided by John Hopkins University GitHub repository.
+https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data/csse_covid_19_time_series
