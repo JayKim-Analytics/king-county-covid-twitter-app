@@ -111,10 +111,17 @@ def style_plot(fig, ax):
     start, end = datetime(2020, 11, 16), datetime(2021, 1, 4)
     lockdown_len = (end - start).days
     restrictions = patches.Rectangle((dates.date2num(start), 0), lockdown_len, ax.get_ylim()[1], fill=True,
-                                     color='#cfe1ff', label='WA State Restrictions')
+                                     color='#cfe1ff')
     ax.add_patch(restrictions)
 
-    ax.legend(loc=2)
+    # Washington State enters Phase 3 of "Healthy Washington - Road to Recovery" Plan
+    phase3_start = datetime(2021, 3, 22)
+    phase3 = patches.Rectangle((dates.date2num(phase3_start), 0), 1, ax.get_ylim()[1], fill=True,
+                                     color='#b7d660', label='WA Recovery Phase 3 Begins')
+    ax.add_patch(phase3)
+
+    # loc=1 - upper-right, loc=2 - upper-left
+    ax.legend(loc=1)
     fig.savefig('graphic.png', bbox_inches='tight', dpi='figure')
     plt.show()
 
