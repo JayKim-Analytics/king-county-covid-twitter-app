@@ -107,21 +107,29 @@ def style_plot(fig, ax):
     # Format x-axis dates as 'day month abbreviation'
     ax.xaxis.set_major_formatter(dates.DateFormatter('%d %b'))
 
-    # Visualization of Nov. 16 - Jan 4 Washington State COVID19 restrictions
+    ''' DEFUNCT - Visualization of Nov. 16 - Jan 4 Washington State COVID19 restrictions 
     start, end = datetime(2020, 11, 16), datetime(2021, 1, 4)
     lockdown_len = (end - start).days
     restrictions = patches.Rectangle((dates.date2num(start), 0), lockdown_len, ax.get_ylim()[1], fill=True,
                                      color='#cfe1ff')
-    ax.add_patch(restrictions)
+    ax.add_patch(restrcitions)
+    '''
 
-    # Washington State enters Phase 3 of "Healthy Washington - Road to Recovery" Plan
+    ''' Washington State enters Phase 3 of "Healthy Washington - Road to Recovery" Plan
     phase3_start = datetime(2021, 3, 22)
     phase3 = patches.Rectangle((dates.date2num(phase3_start), 0), 1, ax.get_ylim()[1], fill=True,
-                                     color='#b7d660', label='WA Recovery Phase 3 Begins')
+                               color='#b7d660', label='WA Phase 3 Begins')
     ax.add_patch(phase3)
+    '''
+
+    # WA State DOH approves Vaccination for ages 12 and older
+    twelveup_start = datetime(2021, 5, 12)
+    twelveup = patches.Rectangle((dates.date2num(twelveup_start), 0), 1, ax.get_ylim()[1], fill=True,
+                                 color='#00ff7b', label='Vaccine Eligibility(12+)')
+    ax.add_patch(twelveup)
 
     # loc=1 - upper-right, loc=2 - upper-left
-    ax.legend(loc=1)
+    ax.legend(loc=2)
     fig.savefig('graphic.png', bbox_inches='tight', dpi='figure')
     plt.show()
 
