@@ -106,15 +106,16 @@ def style_plot(fig, ax):
 
     # Format x-axis dates as 'day month abbreviation'
     ax.xaxis.set_major_formatter(dates.DateFormatter('%d %b'))
-    ''' DEFUNCT
-    # Visualization of Nov. 16 - Jan 4 Washington State COVID19 restrictions
+
+    ''' DEFUNCT - Visualization of Nov. 16 - Jan 4 Washington State COVID19 restrictions
     start, end = datetime(2020, 11, 16), datetime(2021, 1, 4)
     lockdown_len = (end - start).days
     restrictions = patches.Rectangle((dates.date2num(start), 0), lockdown_len, ax.get_ylim()[1], fill=True,
                                      color='#cfe1ff')
     ax.add_patch(restrictions)
+    '''
 
-    # Washington State enters Phase 3 of "Healthy Washington - Road to Recovery" Plan
+    ''' DEFUNCT - Washington State enters Phase 3 of "Healthy Washington - Road to Recovery" Plan
     phase3_start = datetime(2021, 3, 22)
     phase3 = patches.Rectangle((dates.date2num(phase3_start), 0), 1, ax.get_ylim()[1], fill=True,
                                      color='#b7d660', label='WA Recovery Phase 3 Begins')
