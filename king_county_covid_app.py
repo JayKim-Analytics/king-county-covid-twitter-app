@@ -106,7 +106,7 @@ def style_plot(fig, ax):
 
     # Format x-axis dates as 'day month abbreviation'
     ax.xaxis.set_major_formatter(dates.DateFormatter('%d %b'))
-
+    ''' DEFUNCT
     # Visualization of Nov. 16 - Jan 4 Washington State COVID19 restrictions
     start, end = datetime(2020, 11, 16), datetime(2021, 1, 4)
     lockdown_len = (end - start).days
@@ -119,6 +119,21 @@ def style_plot(fig, ax):
     phase3 = patches.Rectangle((dates.date2num(phase3_start), 0), 1, ax.get_ylim()[1], fill=True,
                                      color='#b7d660', label='WA Recovery Phase 3 Begins')
     ax.add_patch(phase3)
+    '''
+    # WA State DOH approves Vaccination for ages 12 and older
+    twelveup_start = datetime(2021, 5, 12)
+    twelveup = patches.Rectangle((dates.date2num(twelveup_start), 0), 1, ax.get_ylim()[1], fill=True,
+                                 color='#00ff7b', label='Vaccine Eligibility(12+)')
+    ax.add_patch(twelveup)
+
+    # WA State lifts COVID-19 Restrictions
+    # https://kingcounty.gov/depts/health/news/2021/June/29-masks.aspx
+    # https://www.governor.wa.gov/issues/issues/covid-19-resources/covid-19-reopening-guidance
+    COVID19_restrictions_lifted = datetime(2021, 6, 30)
+    COVID19_restrictions_lifted = patches.Rectangle((dates.date2num(COVID19_restrictions_lifted), 0), 1,
+                                                    ax.get_ylim()[1], fill=True,
+                                                    color='#cfe1ff', label='State Restrictions Lifted')
+    ax.add_patch(COVID19_restrictions_lifted)
 
     # loc=1 - upper-right, loc=2 - upper-left
     ax.legend(loc=1)
