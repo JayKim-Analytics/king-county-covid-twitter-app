@@ -5,5 +5,5 @@ A twitter bot that tweets daily COVID-19 statistics for the King County area in 
 
 Script ran daily via PythonAnywhere.
 
-Dataset provided by John Hopkins University GitHub repository.
-https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data/csse_covid_19_time_series
+Dataset provided by COVID-19 Data Repository by the Center for Systems Science and Engineering (CSSE) at Johns Hopkins University.
+https://github.com/CSSEGISandData/COVID-19.
