@@ -2,6 +2,7 @@
 import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
+from scipy import interpolate
 from dateutil.relativedelta import relativedelta
 from matplotlib import pyplot as plt
 from matplotlib import dates
@@ -82,9 +83,16 @@ def plot_data(ax, df, label, color):
     # creates 3 month window for plot
     df = df.loc[str(window):str(yesterday)]
 
+    # interpolate data to create smoothed data visual
+    date_win = pd.date_range(window, freq='W', periods=93)
+    new_x = pd.date_range(window, prev_day, periods=500)
+    spl = interpolate.make_interp_spline(date_win, df['Weekly Rate'], k=3)
+    smooth = spl(new_x)
+
     # plots weekly rate per 100k line
     s_d = ax.plot_date(df.index, df['Weekly Rate'], color=color, linestyle='-', marker=None,
                        label=label, linewidth=2)
+    b = ax.plot_date(new_x, smooth, color=color, linestyle='dashed', marker=None, label='Interpolated', linewidth=0.75)
 
 
 def style_plot(fig, ax):
@@ -108,20 +116,21 @@ def style_plot(fig, ax):
     ax.xaxis.set_major_formatter(dates.DateFormatter('%d %b'))
 
 
-    ''' DEFUNCT - Visualization of Nov. 16 - Jan 4 Washington State COVID19 restrictions 
+    ''' DEFUNCT VISUALIZATIONS
+    Visualization of Nov. 16 - Jan 4 Washington State COVID19 restrictions 
     start, end = datetime(2020, 11, 16), datetime(2021, 1, 4)
     lockdown_len = (end - start).days
     restrictions = patches.Rectangle((dates.date2num(start), 0), lockdown_len, ax.get_ylim()[1], fill=True,
                                      color='#cfe1ff')
     ax.add_patch(restrictions)
-    '''
 
-    ''' DEFUNCT - Washington State enters Phase 3 of "Healthy Washington - Road to Recovery" Plan
+
+    Washington State enters Phase 3 of "Healthy Washington - Road to Recovery" Plan
     phase3_start = datetime(2021, 3, 22)
     phase3 = patches.Rectangle((dates.date2num(phase3_start), 0), 1, ax.get_ylim()[1], fill=True,
                                color='#b7d660', label='WA Phase 3 Begins')
     ax.add_patch(phase3)
-    '''
+
 
     # WA State DOH approves Vaccination for ages 12 and older
     twelveup_start = datetime(2021, 5, 12)
@@ -137,7 +146,8 @@ def style_plot(fig, ax):
                                                     ax.get_ylim()[1], fill=True,
                                                     color='#cfe1ff', label='State Restrictions Lifted')
     ax.add_patch(COVID19_restrictions_lifted)
-    
+    '''
+
     # loc=1 - upper-right, loc=2 - upper-left
     ax.legend(loc=2)
     fig.savefig('graphic.png', bbox_inches='tight', dpi='figure')
