@@ -124,13 +124,11 @@ def style_plot(fig, ax):
                                      color='#cfe1ff')
     ax.add_patch(restrictions)
 
-
     Washington State enters Phase 3 of "Healthy Washington - Road to Recovery" Plan
     phase3_start = datetime(2021, 3, 22)
     phase3 = patches.Rectangle((dates.date2num(phase3_start), 0), 1, ax.get_ylim()[1], fill=True,
                                color='#b7d660', label='WA Phase 3 Begins')
     ax.add_patch(phase3)
-
 
     # WA State DOH approves Vaccination for ages 12 and older
     twelveup_start = datetime(2021, 5, 12)
@@ -146,6 +144,20 @@ def style_plot(fig, ax):
                                                     ax.get_ylim()[1], fill=True,
                                                     color='#cfe1ff', label='State Restrictions Lifted')
     ax.add_patch(COVID19_restrictions_lifted)
+    
+    WA State insituites an indoor mask mandate
+    # https://www.governor.wa.gov/sites/default/files/proclamations/20-25.15%20-%20COVID-19%20Washington%20Ready.pdf
+    indoor_mask_mandate = datetime(2021, 8, 23)
+    indoor_mask_mandate = patches.Rectangle((dates.date2num(indoor_mask_mandate), 0), 1, ax.get_ylim()[1], fill=True,
+                               color='#b7d660', label='Indoor Mask Mandate Begins')
+    ax.add_patch(indoor_mask_mandate)
+
+    WA Statewide mask requirement transitions to recommendations
+    # https: // doh.wa.gov / emergencies / covid - 19 / masks - and -face - coverings
+    mask_requirement_lifted = datetime(2022, 3, 12)
+    mask_requirement_lifted = patches.Rectangle((dates.date2num(mask_requirement_lifted), 0), 1, ax.get_ylim()[1], fill=True,
+                                 color='#00ff7b', label='Statewide Mask Req. Expires')
+    ax.add_patch(mask_requirement_lifted)
     '''
 
     # loc=1 - upper-right, loc=2 - upper-left
