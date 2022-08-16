@@ -2,6 +2,8 @@
 import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
+
+from scipy import interpolate
 from dateutil.relativedelta import relativedelta
 from matplotlib import pyplot as plt
 from matplotlib import dates
@@ -49,6 +51,7 @@ def build_df():
 
 
 def filter_wa_kc(df):
+
     # Creates dataframe filtered for Washington State, King County
     a = df[(df['state'] == 'Washington') & (df['county'] == 'King')].copy()
 
@@ -63,14 +66,22 @@ def filter_wa_kc(df):
 def filter_wa_state(df):
     # Creates dataframe filtered for Washington State
     a = df[(df['state'] == 'Washington')].copy()
+
     # Data is divided by state and county, values need to be combined.
     b = a.groupby(['date'], as_index=True)['reported_cases'].sum().groupby(level=0).cumsum().reset_index()
     c = a.groupby(['date'], as_index=True)['reported_deaths'].sum().groupby(level=0).cumsum().reset_index()
     c.set_index('date', inplace=True)
 
+
     b['1 Day New Cases'] = b['reported_cases'].diff()
+    #b['7 Day New Cases'] = b['1 Day New Cases'].rolling(window=7).sum()
+    #b['Weekly Rate'] = [(x / wa_state_pop) * 100000 for x in b['7 Day New Cases']]
+    #b['Zeroes Scrubbed'] = b['1 Day New Cases'].replace(0, np.NaN)
+    #b['Scrubbed 7 Day'] =b['Zeroes Scrubbed'].rolling(window=7, min_periods=1).sum()
+    # b['Scrubbed Weekly Rate'] = [(x / wa_state_pop) * 100000 for x in b['Scrubbed 7 Day']]
     b['7 Day New Cases'] = b['1 Day New Cases'].rolling(window=7).sum()
     b['Weekly Rate'] = [(x / wa_state_pop) * 100000 for x in b['7 Day New Cases']]
+    b['Day'] = b['date'].dt.day_name()
     b.set_index('date', inplace=True)
 
     merge = pd.merge(b, c, how='inner', left_index=True, right_index=True)
@@ -82,9 +93,17 @@ def plot_data(ax, df, label, color):
     # creates 3 month window for plot
     df = df.loc[str(window):str(yesterday)]
 
+    # interpolate data to create smoothed data visual
+    date_win = pd.date_range(window, freq='W', periods=93)
+    new_x = pd.date_range(window, prev_day, periods=500)
+    spl = interpolate.make_interp_spline(date_win, df['Weekly Rate'], k=3)
+    smooth = spl(new_x)
+
     # plots weekly rate per 100k line
     s_d = ax.plot_date(df.index, df['Weekly Rate'], color=color, linestyle='-', marker=None,
                        label=label, linewidth=2)
+    b = ax.plot_date(new_x, smooth, color=color, linestyle='dashed', marker=None, label='Interpolated', linewidth=0.75)
+
 
 
 def style_plot(fig, ax):
@@ -121,20 +140,32 @@ def style_plot(fig, ax):
                                      color='#b7d660', label='WA Recovery Phase 3 Begins')
     ax.add_patch(phase3)
     '''
-    # WA State DOH approves Vaccination for ages 12 and older
+
+    '''DEFUNCT - WA State DOH approves Vaccination for ages 12 and older
     twelveup_start = datetime(2021, 5, 12)
     twelveup = patches.Rectangle((dates.date2num(twelveup_start), 0), 1, ax.get_ylim()[1], fill=True,
                                  color='#00ff7b', label='Vaccine Eligibility(12+)')
     ax.add_patch(twelveup)
+    '''
 
-    # WA State lifts COVID-19 Restrictions
-    # https://kingcounty.gov/depts/health/news/2021/June/29-masks.aspx
-    # https://www.governor.wa.gov/issues/issues/covid-19-resources/covid-19-reopening-guidance
+    ''' DEFUNCT - WA State lifts COVID-19 Restrictions
+    https://kingcounty.gov/depts/health/news/2021/June/29-masks.aspx
+    https://www.governor.wa.gov/issues/issues/covid-19-resources/covid-19-reopening-guidance
     COVID19_restrictions_lifted = datetime(2021, 6, 30)
     COVID19_restrictions_lifted = patches.Rectangle((dates.date2num(COVID19_restrictions_lifted), 0), 1,
                                                     ax.get_ylim()[1], fill=True,
                                                     color='#cfe1ff', label='State Restrictions Lifted')
     ax.add_patch(COVID19_restrictions_lifted)
+    '''
+
+    '''
+    #DEFUNCT - WA Statewide mask requirement transitions to recommendations
+    # https: // doh.wa.gov / emergencies / covid - 19 / masks - and -face - coverings
+    mask_requirement_lifted = datetime(2022, 3, 12)
+    mask_requirement_lifted = patches.Rectangle((dates.date2num(mask_requirement_lifted), 0), 1, ax.get_ylim()[1], fill=True,
+                                 color='#00ff7b', label='Statewide Mask Req. Expires')
+    ax.add_patch(mask_requirement_lifted)
+    '''
 
     # loc=1 - upper-right, loc=2 - upper-left
     ax.legend(loc=1)
@@ -189,6 +220,7 @@ if __name__ == '__main__':
 
     wa_kc_df = filter_wa_kc(build_df())
     wa_state_df = filter_wa_state(build_df())
+    pd.options.display.width = 0
 
     figure, axes = plt.subplots(figsize=(6, 5))
     plot_data(axes, wa_kc_df, 'King County', '#ffa600')
